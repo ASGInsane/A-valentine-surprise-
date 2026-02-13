@@ -5,7 +5,7 @@
 <title>My Valentine 💖</title>
 
 <!-- Romantic Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -16,37 +16,37 @@ body {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Poppins', sans-serif;
     transition: background 2s ease;
 }
 
+/* Container */
 .container {
     text-align: center;
-    animation: fadeIn 1.5s ease;
 }
 
 h1 {
     color: white;
-    font-size: 2.8rem;
-    font-family: 'Great Vibes', cursive;
-    text-shadow: 0 0 20px rgba(255,255,255,0.8);
+    font-size: 3rem;
 }
 
-.cat {
-    width: 320px;
-    max-width: 80vw;
-    margin: 20px 0;
-    animation: bounce 1.5s infinite ease-in-out;
+/* Buttons Layout */
+.buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
+/* Buttons */
 button {
     border: none;
-    padding: 15px 35px;
-    font-size: 20px;
-    border-radius: 50px;
+    padding: 18px 50px;
+    font-size: 24px;
+    border-radius: 60px;
     cursor: pointer;
-    margin: 10px;
     transition: all 0.3s ease;
+    font-weight: 600;
 }
 
 #yes {
@@ -59,57 +59,52 @@ button {
     color: white;
 }
 
+button:hover {
+    transform: scale(1.1);
+}
+
+/* Shake */
 .shake { animation: shake 0.4s; }
-
 @keyframes shake {
-    0% { transform: translateX(0); }
     25% { transform: translateX(-6px); }
-    50% { transform: translateX(6px); }
-    75% { transform: translateX(-6px); }
-    100% { transform: translateX(0); }
+    75% { transform: translateX(6px); }
 }
 
-@keyframes bounce {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-}
-
+/* YES zoom animation */
 .zoomOut { animation: zoomOut 1s forwards; }
-
 @keyframes zoomOut {
     to { transform: scale(20); opacity: 0; }
 }
 
-.float {
-    position: absolute;
-    font-size: 26px;
-    animation: floatUp 5s linear forwards;
-}
-
-@keyframes floatUp {
-    from { transform: translateY(100vh); opacity: 1; }
-    to { transform: translateY(-10vh); opacity: 0; }
-}
-
+/* FINAL PAGE */
 .final {
     text-align: center;
     color: white;
-    animation: slideIn 1.5s ease forwards;
+    font-family: 'Great Vibes', cursive;
+    animation: fadeIn 2s ease;
 }
 
 .final h1 {
-    font-size: 3.5rem;
-    animation: glow 2s infinite alternate;
+    font-size: 4rem;
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(50px) scale(0.7); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
 }
 
-@keyframes glow {
-    from { text-shadow: 0 0 10px #fff; }
-    to { text-shadow: 0 0 40px #ffb6c1; }
+.gallery img {
+    width: 260px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    animation: float 4s infinite ease-in-out;
+}
+
+@keyframes float {
+    50% { transform: translateY(-10px); }
 }
 </style>
 </head>
@@ -125,119 +120,73 @@ button {
     <source src="https://cdn.pixabay.com/audio/2022/02/23/audio_2c8f4c87c7.mp3">
 </audio>
 
-<!-- BUTTON SOUNDS -->
-<audio id="yesSound">
-    <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_c1f6c9f7b0.mp3">
-</audio>
-
-<audio id="noSound">
-    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_4f0c8e6b22.mp3">
-</audio>
-
 <div class="container" id="main">
     <h1>Will you be my Valentine? 💖</h1>
 
-    <!-- BIG CUTE CAT -->
-    <img class="cat" src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
-
-    <br>
-    <button id="yes">YES 💚</button>
-    <button id="no">NO 😐</button>
+    <div class="buttons">
+        <button id="yes">YES 💚</button>
+        <button id="no">NO 😐</button>
+    </div>
 </div>
-
-<div class="hearts"></div>
-<div class="celebration"></div>
 
 <script>
 const noTexts = [
-    "NO 😐",
-    "Are you sure? 🥺",
-    "Really sure? 😟",
-    "Still going for no? 😢",
-    "This hurts 💔",
-    "I’m sad now 😭",
-    "Please rethink 💞",
-    "Almost there 🥹",
-    "Don’t break my heart 💖",
-    "You asked for it 😌"
+"NO 😐",
+"Are you sure? 🥺",
+"Really sure? 😟",
+"Still going for no? 😢",
+"This hurts 💔",
+"I’m sad now 😭",
+"Please rethink 💞",
+"Almost there 🥹",
+"Don’t break my heart 💖",
+"You asked for it 😌"
 ];
 
-let noCount = localStorage.getItem("noCount")
-    ? parseInt(localStorage.getItem("noCount"))
-    : 0;
-
-let yesScale = 1 + noCount * 0.25;
+let noCount = 0;
+let yesSize = 1;
 
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
 const cuteMusic = document.getElementById("cuteMusic");
 const finalMusic = document.getElementById("finalMusic");
-const yesSound = document.getElementById("yesSound");
-const noSound = document.getElementById("noSound");
-
-yesBtn.style.transform = `scaleX(${yesScale})`;
-noBtn.innerText = noTexts[Math.min(noCount, 9)];
-noBtn.style.marginTop = `${noCount * 8}px`;
 
 noBtn.onclick = () => {
-    noSound.play();
     noBtn.classList.add("shake");
     setTimeout(() => noBtn.classList.remove("shake"), 400);
 
     noCount++;
-    localStorage.setItem("noCount", noCount);
+    yesSize += 0.2;
 
-    if (noCount >= 10) {
-        fullYes();
-    } else {
-        setTimeout(() => location.reload(), 600);
-    }
+    yesBtn.style.transform = `scale(${yesSize})`;
+    noBtn.innerText = noTexts[Math.min(noCount, 9)];
+    noBtn.style.marginTop = `${noCount * 8}px`;
+
+    if (noCount >= 10) fullYes();
 };
 
 yesBtn.onclick = fullYes;
 
 function fullYes() {
-    localStorage.clear();
-    yesSound.play();
     cuteMusic.pause();
     finalMusic.play();
-
     yesBtn.classList.add("zoomOut");
 
     setTimeout(() => {
-        document.body.style.background =
-            "radial-gradient(circle at top, #1a1a40, #000)";
         document.body.innerHTML = `
-            <div class="final">
-                <h1>I KNEW YOU WOULD SAY YES 💕</h1>
-                <h2>You are the best thing in my life 🌍</h2>
-                <h1>I LOVE YOU ❤️</h1>
+        <div class="final">
+            <h1>I KNEW YOU WOULD SAY YES 💕</h1>
+            <h2>You are my favorite person 🌍</h2>
+            <h1>I LOVE YOU ❤️</h1>
+
+            <div class="gallery">
+                <img src="photo1.jpg">
+                <img src="photo2.jpg">
+                <img src="photo3.jpg">
+                <img src="photo4.jpg">
             </div>
-            <div class="hearts"></div>
-            <div class="celebration"></div>
-        `;
-        startHearts();
-        startCelebration();
+        </div>`;
     }, 900);
-}
-
-function startHearts() {
-    setInterval(() => spawn("❤️"), 200);
-}
-
-function startCelebration() {
-    setInterval(() => {
-        spawn(["🎆","🎉","🎊","✨","💘"][Math.floor(Math.random()*5)]);
-    }, 150);
-}
-
-function spawn(symbol) {
-    const el = document.createElement("div");
-    el.className = "float";
-    el.innerHTML = symbol;
-    el.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 5000);
 }
 </script>
 
