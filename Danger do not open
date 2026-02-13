@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Valentine 💖</title>
+
+<!-- Romantic Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #ffd1dc, #ff4f8b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Nunito', sans-serif;
+    transition: background 2s ease;
+}
+
+.container {
+    text-align: center;
+    animation: fadeIn 1.5s ease;
+}
+
+h1 {
+    color: white;
+    font-size: 2.8rem;
+    font-family: 'Great Vibes', cursive;
+    text-shadow: 0 0 20px rgba(255,255,255,0.8);
+}
+
+.cat {
+    width: 320px;
+    max-width: 80vw;
+    margin: 20px 0;
+    animation: bounce 1.5s infinite ease-in-out;
+}
+
+button {
+    border: none;
+    padding: 15px 35px;
+    font-size: 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 10px;
+    transition: all 0.3s ease;
+}
+
+#yes {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    color: white;
+}
+
+#no {
+    background: linear-gradient(45deg, #ff4d4d, #c0392b);
+    color: white;
+}
+
+.shake { animation: shake 0.4s; }
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.zoomOut { animation: zoomOut 1s forwards; }
+
+@keyframes zoomOut {
+    to { transform: scale(20); opacity: 0; }
+}
+
+.float {
+    position: absolute;
+    font-size: 26px;
+    animation: floatUp 5s linear forwards;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(100vh); opacity: 1; }
+    to { transform: translateY(-10vh); opacity: 0; }
+}
+
+.final {
+    text-align: center;
+    color: white;
+    animation: slideIn 1.5s ease forwards;
+}
+
+.final h1 {
+    font-size: 3.5rem;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(50px) scale(0.7); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #fff; }
+    to { text-shadow: 0 0 40px #ffb6c1; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="cuteMusic" autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_9bca2c6a52.mp3">
+</audio>
+
+<audio id="finalMusic" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/02/23/audio_2c8f4c87c7.mp3">
+</audio>
+
+<!-- BUTTON SOUNDS -->
+<audio id="yesSound">
+    <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_c1f6c9f7b0.mp3">
+</audio>
+
+<audio id="noSound">
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_4f0c8e6b22.mp3">
+</audio>
+
+<div class="container" id="main">
+    <h1>Will you be my Valentine? 💖</h1>
+
+    <!-- BIG CUTE CAT -->
+    <img class="cat" src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
+
+    <br>
+    <button id="yes">YES 💚</button>
+    <button id="no">NO 😐</button>
+</div>
+
+<div class="hearts"></div>
+<div class="celebration"></div>
+
+<script>
+const noTexts = [
+    "NO 😐",
+    "Are you sure? 🥺",
+    "Really sure? 😟",
+    "Still going for no? 😢",
+    "This hurts 💔",
+    "I’m sad now 😭",
+    "Please rethink 💞",
+    "Almost there 🥹",
+    "Don’t break my heart 💖",
+    "You asked for it 😌"
+];
+
+let noCount = localStorage.getItem("noCount")
+    ? parseInt(localStorage.getItem("noCount"))
+    : 0;
+
+let yesScale = 1 + noCount * 0.25;
+
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const cuteMusic = document.getElementById("cuteMusic");
+const finalMusic = document.getElementById("finalMusic");
+const yesSound = document.getElementById("yesSound");
+const noSound = document.getElementById("noSound");
+
+yesBtn.style.transform = `scaleX(${yesScale})`;
+noBtn.innerText = noTexts[Math.min(noCount, 9)];
+noBtn.style.marginTop = `${noCount * 8}px`;
+
+noBtn.onclick = () => {
+    noSound.play();
+    noBtn.classList.add("shake");
+    setTimeout(() => noBtn.classList.remove("shake"), 400);
+
+    noCount++;
+    localStorage.setItem("noCount", noCount);
+
+    if (noCount >= 10) {
+        fullYes();
+    } else {
+        setTimeout(() => location.reload(), 600);
+    }
+};
+
+yesBtn.onclick = fullYes;
+
+function fullYes() {
+    localStorage.clear();
+    yesSound.play();
+    cuteMusic.pause();
+    finalMusic.play();
+
+    yesBtn.classList.add("zoomOut");
+
+    setTimeout(() => {
+        document.body.style.background =
+            "radial-gradient(circle at top, #1a1a40, #000)";
+        document.body.innerHTML = `
+            <div class="final">
+                <h1>I KNEW YOU WOULD SAY YES 💕</h1>
+                <h2>You are the best thing in my life 🌍</h2>
+                <h1>I LOVE YOU ❤️</h1>
+            </div>
+            <div class="hearts"></div>
+            <div class="celebration"></div>
+        `;
+        startHearts();
+        startCelebration();
+    }, 900);
+}
+
+function startHearts() {
+    setInterval(() => spawn("❤️"), 200);
+}
+
+function startCelebration() {
+    setInterval(() => {
+        spawn(["🎆","🎉","🎊","✨","💘"][Math.floor(Math.random()*5)]);
+    }, 150);
+}
+
+function spawn(symbol) {
+    const el = document.createElement("div");
+    el.className = "float";
+    el.innerHTML = symbol;
+    el.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 5000);
+}
+</script>
+
+</body>
+</html>
